@@ -1,0 +1,3 @@
+#!/bin/sh
+cd $(dirname $0)/../
+./node_modules/elm/binwrappers/elm-reactor -p 4000
