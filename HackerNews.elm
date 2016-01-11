@@ -20,7 +20,10 @@ header =
 
 item : String -> Html
 item title =
-  li [ itemStyle ] [ text title ]
+  li [ itemStyle ]
+    [ span [ itemTitleStyle ] [ text title ]
+    , span [ itemAddressStyle ] [ text "Address" ]
+    ]
 
 itemList : Model -> Html
 itemList model =
@@ -67,6 +70,20 @@ itemStyle =
   style
     [ ("list-style", "none")
     , ("margin", "1em")
+    ]
+
+itemTitleStyle : Attribute
+itemTitleStyle =
+  style
+    [ ("", "")
+    ]
+
+itemAddressStyle : Attribute
+itemAddressStyle =
+  style
+    [ ("float", "right")
+    , ("opacity", ".6")
+    , ("font-size", ".8em")
     ]
 
 main : Html
