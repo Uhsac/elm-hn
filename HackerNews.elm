@@ -124,7 +124,7 @@ fetchStory storyId =
 
 fetchTopStories : List String -> Effects Action
 fetchTopStories topStoriesId =
-  List.map fetchStory topStoriesId
+  List.map fetchStory (List.take 10 topStoriesId)
     |> Task.sequence
     |> Task.toMaybe
     |> Task.map FetchTopStories
