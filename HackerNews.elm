@@ -27,15 +27,12 @@ type alias Model = List Story
 
 initialModel : Model
 initialModel =
-  [ {title = "Link 1", url = "http://google.com"}
-  , {title = "Link 2", url = "http://google.com"}
-  , {title = "Link 3", url = "http://google.com"}
-  ]
+  []
 
 init : Model -> (Model, Effects Action)
 init model =
   ( model
-  , Effects.none
+  , fetchTopStoriesId
   )
 
 -- View
@@ -113,17 +110,26 @@ itemAddressStyle =
     ]
 
 -- API
-{-
-fetchTopStories : Task Task.succeed (List String)
-fetchTopStories =
-  Http.get (Jd.list Jd.string) hackerNewsTopStoriesEndpoint
-    |> Task.onError (\_ -> Task.succeed [])
 
-fetchStory : String -> Task Task.succeed Story
+fetchTopStoriesId : Effects Action
+fetchTopStoriesId =
+  Http.get (Jd.list Jd.string) hackerNewsTopStoriesEndpoint
+    |> Task.toMaybe
+    |> Task.map FetchTopStoriesId
+    |> Effects.task
+
+fetchStory : String -> Task Http.Error Story
 fetchStory storyId =
-  Http.get storyDecoder hackerNewsItemEndpoint ++ storyId ++ ".json"
-    |> Task.onError (\_ -> Task.succeed {})
--}
+  Http.get storyDecoder (hackerNewsItemEndpoint ++ storyId ++ ".json")
+
+fetchTopStories : List String -> Effects Action
+fetchTopStories topStoriesId =
+  List.map fetchStory topStoriesId
+    |> Task.sequence
+    |> Task.toMaybe
+    |> Task.map FetchTopStories
+    |> Effects.task
+
 -- Decoder
 
 storyDecoder : Jd.Decoder Story
@@ -136,6 +142,8 @@ storyDecoder =
 
 type Action
   = NoOp
+  | FetchTopStoriesId (Maybe (List String))
+  | FetchTopStories (Maybe (List Story))
 
 -- Update
 
@@ -144,6 +152,16 @@ update action model =
   case action of
     NoOp ->
       (model, Effects.none)
+
+    FetchTopStoriesId maybeTopStoriesId ->
+      ( model
+      , fetchTopStories (Maybe.withDefault [] maybeTopStoriesId)
+      )
+
+    FetchTopStories maybeTopStories ->
+      ( Maybe.withDefault [] maybeTopStories
+      , Effects.none
+      )
 
 -- App
 
