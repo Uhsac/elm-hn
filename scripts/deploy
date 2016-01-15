@@ -1,0 +1,8 @@
+#!/bin/sh
+cd $(dirname $0)/../
+git checkout gh-pages
+./node_modules/elm/binwrappers/elm-make HackerNews.elm --output=index.html
+git add index.html
+git commit -m "Update"
+git push origin gh-pages
+git checkout master
