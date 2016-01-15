@@ -113,7 +113,7 @@ itemAddressStyle =
 
 fetchTopStoriesId : Effects Action
 fetchTopStoriesId =
-  Http.get (Jd.list Jd.string) hackerNewsTopStoriesEndpoint
+  Http.get (Jd.list (Jd.map toString Jd.int)) hackerNewsTopStoriesEndpoint
     |> Task.toMaybe
     |> Task.map FetchTopStoriesId
     |> Effects.task
@@ -124,7 +124,7 @@ fetchStory storyId =
 
 fetchTopStories : List String -> Effects Action
 fetchTopStories topStoriesId =
-  List.map fetchStory (List.take 10 topStoriesId)
+  List.map fetchStory (List.take 30 topStoriesId)
     |> Task.sequence
     |> Task.toMaybe
     |> Task.map FetchTopStories
