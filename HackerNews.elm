@@ -5,6 +5,8 @@ import Json.Decode as Jd exposing ((:=))
 import Task exposing (Task)
 import StartApp
 import Effects exposing (Effects)
+import String
+import List
 
 -- Constant
 
@@ -29,6 +31,16 @@ initialModel : Model
 initialModel =
   []
 
+formatStory : Story-> Story
+formatStory story =
+  Story
+    story.title
+    (story.url
+      |> String.split "/"
+      |> List.drop 2
+      |> List.head
+      |> Maybe.withDefault "")
+
 init : Model -> (Model, Effects Action)
 init model =
   ( model
@@ -43,10 +55,20 @@ header =
 
 item : Story -> Html
 item story =
-  li [ itemStyle ]
-    [ span [ itemTitleStyle ] [ text story.title ]
-    , span [ itemAddressStyle ] [ text story.url ]
-    ]
+  let
+    titleLink = href story.url
+    formatedUrl =
+      story.url
+        |> String.split "/"
+        |> List.drop 2
+        |> List.head
+        |> Maybe.withDefault ""
+    addressLink = href ("http://" ++ formatedUrl)
+  in
+    li [ itemStyle ]
+      [ a [ itemTitleStyle, titleLink ] [ text story.title ]
+      , a [ itemAddressStyle, addressLink ] [ text formatedUrl ]
+      ]
 
 itemList : Model -> Html
 itemList model =
@@ -98,7 +120,7 @@ itemStyle =
 itemTitleStyle : Attribute
 itemTitleStyle =
   style
-    [ ("", "")
+    [ ("color", "black")
     ]
 
 itemAddressStyle : Attribute
@@ -107,6 +129,7 @@ itemAddressStyle =
     [ ("float", "right")
     , ("opacity", ".6")
     , ("font-size", ".8em")
+    , ("color", "black")
     ]
 
 -- API
@@ -124,7 +147,7 @@ fetchStory storyId =
 
 fetchTopStories : List String -> Effects Action
 fetchTopStories topStoriesId =
-  List.map fetchStory (List.take 30 topStoriesId)
+  List.map fetchStory (List.take 3 topStoriesId)
     |> Task.sequence
     |> Task.toMaybe
     |> Task.map FetchTopStories
