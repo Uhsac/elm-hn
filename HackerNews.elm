@@ -121,12 +121,13 @@ itemTitleStyle : Attribute
 itemTitleStyle =
   style
     [ ("color", "black")
+    , ("display", "block")
     ]
 
 itemAddressStyle : Attribute
 itemAddressStyle =
   style
-    [ ("float", "right")
+    [ ("display", "block")
     , ("opacity", ".6")
     , ("font-size", ".8em")
     , ("color", "black")
@@ -147,7 +148,7 @@ fetchStory storyId =
 
 fetchTopStories : List String -> Effects Action
 fetchTopStories topStoriesId =
-  List.map fetchStory (List.take 3 topStoriesId)
+  List.map fetchStory (List.take 10 topStoriesId)
     |> Task.sequence
     |> Task.toMaybe
     |> Task.map FetchTopStories
