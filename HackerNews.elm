@@ -122,6 +122,7 @@ itemTitleStyle =
   style
     [ ("color", "black")
     , ("display", "block")
+    , ("text-decoration", "none")
     ]
 
 itemAddressStyle : Attribute
@@ -131,6 +132,7 @@ itemAddressStyle =
     , ("opacity", ".6")
     , ("font-size", ".8em")
     , ("color", "black")
+    , ("text-decoration", "none")
     ]
 
 -- API
