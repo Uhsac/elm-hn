@@ -2,8 +2,8 @@
 cd $(dirname $0)/../
 git checkout gh-pages
 git rebase master
-./node_modules/elm/binwrappers/elm-make HackerNews.elm --output=index.html
-git add index.html
+./node_modules/elm/binwrappers/elm-make HackerNews.elm --output=HackerNews.js
+git add HackerNews.js
 git commit -m "Update"
 git push origin gh-pages --force
 git checkout master
