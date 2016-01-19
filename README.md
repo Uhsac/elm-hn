@@ -24,6 +24,6 @@ git clone git@github.com:Uhsac/elm-hn.git
 
 ## Todo
 
-- [] Fetch item one by one to display stories progressively
-- [] Add pagination support
-- [] Display stories 30 by 30
+- [ ] Fetch item one by one to display stories progressively
+- [ ] Add pagination support
+- [ ] Display stories 30 by 30
