@@ -1,3 +1,5 @@
+module HackerNews where
+
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
